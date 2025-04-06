@@ -1,4 +1,4 @@
-from src.model import Partei, Datenkatalog, Austauschvorgang, Storage, List
+from src.model.model import Partei, Datenkatalog, Austauschvorgang, Storage, List
 
 
 def who_are_parties(storage: Storage, parties: List[dict]) -> None:

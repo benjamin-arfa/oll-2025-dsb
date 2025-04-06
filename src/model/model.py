@@ -135,7 +135,7 @@ class Datenkatalog:
     sensitivity: str = ""  # normal/special/confidential
     legal_basis: str = ""
     purpose: str = ""
-    affected_persons: List[str] = None
+    affected_persons: List[str] = field(default_factory=list)
     retention_period: str = ""
     storage: Storage = field(default_factory=Storage)
 
@@ -157,7 +157,7 @@ class Austauschvorgang:
     identifier: str = ""
     sender: str = ""
     recipient: str = ""
-    data_categories: List[str] = None
+    data_categories: List[str] = field(default_factory=list)
     transfer_type: str = ""  # internal/external
     transfer_method: str = ""
     encryption: bool = False
@@ -182,7 +182,7 @@ class Archivierung:
     identifier: str = ""
     storage_location: str = ""
     storage_duration: str = ""
-    access_restrictions: List[str] = None
+    access_restrictions: List[str] = field(default_factory=list)
     encryption: bool = False
     deletion_date: Optional[datetime] = None
     storage: Storage = field(default_factory=Storage)
