@@ -1,6 +1,7 @@
-from dataclasses import dataclass, field, post_init
+from dataclasses import dataclass, field, post_init, asdict
 from typing import List, Optional, Type, TypeVar, Dict
 from datetime import datetime
+import json
 
 T = TypeVar("T")
 
@@ -44,6 +45,20 @@ class Storage:
         """Get an item by class and identifier"""
         return self.get_by_id(item_class, identifier)
 
+    def to_json(self):
+        """Convert storage to JSON"""
+        return json.dumps(self._storage, default=lambda o: o.__dict__)
+
+    @classmethod
+    def from_json(cls, json_str):
+        """Create storage from JSON"""
+        storage = cls()
+        data = json.loads(json_str)
+        for type_name, items in data.items():
+            for key, value in items.items():
+                storage._storage[type_name][key] = value
+        return storage
+
 
 @dataclass
 class System:
@@ -59,6 +74,13 @@ class System:
     def __post_init__(self):
         self.storage.add(self)
 
+    def to_json(self):
+        return json.dumps(asdict(self))
+
+    @classmethod
+    def from_json(cls, json_str):
+        return cls(**json.loads(json_str))
+
 
 @dataclass
 class Partei:
@@ -71,6 +93,13 @@ class Partei:
 
     def __post_init__(self):
         self.storage.add(self)
+
+    def to_json(self):
+        return json.dumps(asdict(self))
+
+    @classmethod
+    def from_json(cls, json_str):
+        return cls(**json.loads(json_str))
 
 
 @dataclass
@@ -85,6 +114,13 @@ class DatenItem:
 
     def __post_init__(self):
         self.storage.add(self)
+
+    def to_json(self):
+        return json.dumps(asdict(self))
+
+    @classmethod
+    def from_json(cls, json_str):
+        return cls(**json.loads(json_str))
 
 
 @dataclass
@@ -106,6 +142,13 @@ class Datenkatalog:
     def __post_init__(self):
         self.storage.add(self)
 
+    def to_json(self):
+        return json.dumps(asdict(self))
+
+    @classmethod
+    def from_json(cls, json_str):
+        return cls(**json.loads(json_str))
+
 
 @dataclass
 class Austauschvorgang:
@@ -124,6 +167,13 @@ class Austauschvorgang:
     def __post_init__(self):
         self.storage.add(self)
 
+    def to_json(self):
+        return json.dumps(asdict(self))
+
+    @classmethod
+    def from_json(cls, json_str):
+        return cls(**json.loads(json_str))
+
 
 @dataclass
 class Archivierung:
@@ -139,6 +189,16 @@ class Archivierung:
 
     def __post_init__(self):
         self.storage.add(self)
+
+    def to_json(self):
+        return json.dumps(asdict(self), default=str)
+
+    @classmethod
+    def from_json(cls, json_str):
+        data = json.loads(json_str)
+        if data.get('deletion_date'):
+            data['deletion_date'] = datetime.fromisoformat(data['deletion_date'])
+        return cls(**data)
 
 
 @dataclass
@@ -156,3 +216,10 @@ class Loeschung:
 
     def __post_init__(self):
         self.storage.add(self)
+
+    def to_json(self):
+        return json.dumps(asdict(self))
+
+    @classmethod
+    def from_json(cls, json_str):
+        return cls(**json.loads(json_str))

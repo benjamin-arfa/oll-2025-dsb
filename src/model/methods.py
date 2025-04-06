@@ -1,14 +1,19 @@
-def who_are_parties(storage: Storage, parties: List[Partei]) -> None:
+from src.model import Partei, Datenkatalog, Austauschvorgang, Storage, List
+
+
+def who_are_parties(storage: Storage, parties: List[dict]) -> None:
     """Save all parties involved in the system"""
     for party in parties:
-        storage.save(party)
+        storage.add(Partei.from_json(party))
 
-def which_datasets_are_processed(storage: Storage, datasets: List[Datenkatalog]) -> None:
+
+def which_datasets_are_processed(storage: Storage, datasets: List[dict]) -> None:
     """Save all data catalogs being processed"""
     for dataset in datasets:
-        storage.save(dataset)
+        storage.add(Datenkatalog.from_json(dataset))
 
-def how_are_data_being_exchanged(storage: Storage, exchanges: List[Austauschvorgang]) -> None:
+
+def how_are_data_being_exchanged(storage: Storage, exchanges: List[dict]) -> None:
     """Save data exchange processes"""
     for exchange in exchanges:
-        storage.save(exchange)
+        storage.add(Austauschvorgang.from_json(exchange))
